@@ -1,0 +1,125 @@
+Reference is to nestjs-mongo-gql repository from github
+
+===============================================RELATIONS=================================================================
+
+==============================================Assigning Lesson to Students==============================================
+
+1 - LESSON INPUT FOLDER, create ASSIGN INPUT file, according to which we have to provide ID of a lesson and [ID] of students 
+  -- so we can save [ID] of students to the data of lesson ID -- as src\lesson\input\assignInput.input.ts
+
+2 - LESSON ENTITY FILE, we will create a field for saving array of student ids in database -- just as a normal field 
+  -- as in src\lesson\lesson.entity.ts
+
+3 - LESSON TYPE FILE, this file is as similar as entity file , we will create a field for student array , 
+  -- we will add a return type too in that , as in src\lesson\lesson.type.ts
+
+4 - LESSON INPUT FILE, this file (class) is/willBe used as input for create a lesson. so whenever we provide input for that 
+  -- we must set student ids array (default value will be an empty array), so whenever we create a lesson by using the input
+  -- file, we will have students property (default value will be []) automatically from the input file and we can use that.
+  -- as in src\lesson\input\lesson.input.ts
+
+5 - LESSON REPO FILE, as we have students as input, we must provide students property when creating a lesson 
+  -- in createLesson method, in parameters, we should be having lessonInput as LessonInput from LessonInput file
+  -- so we when we create a lesson, we need to do lesson.students(defined in entity): lessonInput.students(which is [] by default)
+  -- as in src\lesson\lesson.repository.ts
+
+  -- now we will have array of student IDz in the Lesson Database, so we should have a method in STUDENT SERVICE file 
+  -- where we can send all the IDz, a lesson has. and STUDENT SERVICE file will return data of that IDz
+
+6 -- STUDENT MODULE FILE and LESSON MODULE FILE, we need to export StudentService class from StudentModule, 
+  -- so we can use StudentModule's StudentService to any module, where we import it 
+  -- in this case, we will import whole StudentModule in LessonModule as forwardRef 
+  -- and we will be able to use StudentModule's exports 
+  -- as in src\lesson\lesson.module.ts and src\student\student.module.ts
+  
+7 - as we imported StudentModule to LessonModule as forwardRef , we can use StudentModule's exports in LessonModule
+  -- so now we will use StudentModule's StudentService in LESSON RESOLVER FILE 
+  -- so in LESSON RESOLVER FILE, in constructor method, we will simply initialize a variable for StudentService
+  -- as in src\lesson\lesson.resolver.ts
+
+8 - LESSON RESOLVER FILE, we should have a Mutation method to assign students to a lesson, in this case, its assignStudentsToLesson
+  -- as we will have parameters according to ASSIGN INPUT file, ID of lesson and [ID] of students
+  -- and in SERVICE FILE to REPO FILE, we will have a method, where we will send that inputs
+  -- it will find data of that ID of lesson and on that data, we will have a property of students, lesson.students
+  -- on lesson.students, we will push [ID] of students coming from input and some previous existing ids by spreading
+  -- and we will save that lesson , so in db of Lesson, lesson.students will have array of student ids
+  -- as in src\lesson\lesson.resolver.ts
+
+9 - STUDENT SERVICE FILE, we will have a method in which we will send array of student ids (from SERVICE RESOLVER) 
+  -- and get their data back, in this case, it is getManyStudents()
+  -- so in SERVICE RESOLVER FILE, we should have a @ResolveField() method, in this method, we will use whole lesson -
+  -- entity in parameters as @Parent() and we will send lesson.students(which is [ID]) to STUDENT SERVICE FILE method -
+  -- getManyStudents() 
+  -- this method will run every time when we get a new student ID/[ID] in lesson.students  
+  -- and this method will do all , 
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! When we do same for RELATION OF LESSONS TO STUDENT
+!!! AFTER ALL OF THAT, WE WILL BE ABLE TO DO 
+when creating a lesson  :-
+mutation {
+  createLesson(lessonInput : { 
+    name: "test2" , 
+    startDate:"2020-09-27T14:44:49.751Z" 
+    students: ["05e09df1-966d-4820-ab56-5ef0b0028d06"]
+  }) {
+    id
+    name
+    startDate
+    endDate
+    students {
+      firstName
+    }
+  }
+}
+
+When creating a student
+mutation {
+  createStudent(studentInput: { firstName: "test5"}) {
+    id
+    firstName
+    lessons {
+      name
+    }
+  }
+}
+
+we could manually assign lessons to student
+mutation {
+   assignLessonsToStudent(assignInput: {
+     studentId: "59cb4a0c-971f-4e8a-a487-ba8a003ab6b4"
+     lessonId: ["93af2026-b1cd-4969-8824-6f27feaa3151" , "f10d0a5a-0235-4f9b-b725-f6128ea6c7ad"]
+   }) {
+     firstName
+   }
+ }
+
+ we could manually assign students to lesson
+ mutation {
+  assignStudentsToLesson(assignInput: { 
+    lessonId: "93af2026-b1cd-4969-8824-6f27feaa3151"
+    studentId: ["59cb4a0c-971f-4e8a-a487-ba8a003ab6b4", "7e927ff2-9980-4924-bd9a-e0a168866bf0" ]
+  }) {
+    name
+  }
+}
+
+and after assigning both to each other , we could do 
+query {
+  getStudents {
+    id
+    firstName
+    lessons {
+      name 
+      startDate
+      students {
+        firstName
+        id
+        lessons {
+          name
+          endDate
+        }
+      }
+    }
+  }
+}

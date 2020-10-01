@@ -1,0 +1,10 @@
+1 - Have typeorm file in config folder 
+2 - In app.module file , we should have forRoot method for GQL and Typeorm
+3 - Create a new module -- for example - task
+4 - task.module file - we must have import for -- forFeature , 
+    in providers, we must have a resolver file and service file 
+    and it it good to have service file in exports 
+5 - in TASK MODULE , we need to have entity and type file (almost same)
+    resolver file and service file , which we use in providers of module file 
+    repository file, which we provide in Typeorm.forFeature method 
+    

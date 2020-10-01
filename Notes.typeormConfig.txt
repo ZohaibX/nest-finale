@@ -1,0 +1,5 @@
+TypeORM -- with mongodb
+
+// add typeorm in app.module , forRoot 
+// in app.module -> typeorm forRoot field -> entities field -> all the entities we create in different module  
+// add it to  module's module file too , forFeature

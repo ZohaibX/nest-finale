@@ -1,0 +1,10 @@
+TypeOrm for mongodb and postgres, 
+
+postgres's TypeOrm file and CRUD is on https://github.com/zohaibbutt045/nestjs-postgres-rest
+mongo's TypeOrm file and CRUD is in here and in https://github.com/zohaibbutt045/nestjs-mongo-gql
+
+Way is same for both 
+
+one typeOrm file in config folder 
+app.module file -- forRoot function 
+in all module files on other modules(like task , lesson) -- forFeature functions

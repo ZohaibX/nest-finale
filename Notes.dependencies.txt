@@ -1,0 +1,5 @@
+yarn add graphql@14.6.0 graphql-tools apollo-server-express @nestjs/graphql  class-validator class-transformer
+yarn add typeorm @nestjs/typeorm mongodb @types/mongodb uuid
+yarn add pg 
+yarn add @nestjs/common @nestjs/typeorm @nestjs/jwt @nestjs/passport
+yarn add passport-jwt @nestjs/jwt passport
