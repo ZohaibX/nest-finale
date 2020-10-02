@@ -17,9 +17,9 @@ export class AuthService {
   private logger = new Logger();
 
   async signUp(authInput: AuthInput): Promise<{ signToken: string }> {
-    const username = await this.authRepo.signUp(authInput);
+    const {id , username} = await this.authRepo.signUp(authInput);
 
-    const payload: JwtPayload = { username }; // JwtPayload is an interface class defined in other file
+    const payload: JwtPayload = { id , username }; // JwtPayload is an interface class defined in other file
     const signToken = this.jwtService.sign(payload); // signing with payload
 
     this.logger.debug(
@@ -29,12 +29,12 @@ export class AuthService {
   }
 
   async signIn(authInput: AuthInput): Promise<{ signToken: string }> {
-    const username = await this.authRepo.validateUserAccount(authInput);
+    const {id , username} = await this.authRepo.validateUserAccount(authInput);
 
     if (!username) throw new UnauthorizedException('Invalid Credentials'); // if null, throw UnauthorizedException
 
     // signing token
-    const payload: JwtPayload = { username }; // JwtPayload is an interface class defined in other file
+    const payload: JwtPayload = { id , username }; // JwtPayload is an interface class defined in other file
     const signToken = this.jwtService.sign(payload); // signing with payload
 
     this.logger.debug(
@@ -47,5 +47,16 @@ export class AuthService {
   async test(username: string) {
     const data = await this.authRepo.findOne({ username });
     console.log(data);
+  }
+
+  async assignTasksToUser(userId: string, taskIds: string[]) {
+    const user = await this.authRepo.findOne({ id: userId });
+    user.tasks = [...user.tasks, ...taskIds];
+    return this.authRepo.save(user)
+  }
+
+  async getAllTasksAssignedToUser(userId): Promise<string[]> {
+    const user = await this.authRepo.findOne({ id: userId });
+    return user.tasks;
   }
 }

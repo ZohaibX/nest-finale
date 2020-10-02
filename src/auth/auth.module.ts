@@ -22,6 +22,6 @@ import { ConfigService } from '@nestjs/config';
     TypeOrmModule.forFeature([AuthRepo]),
   ],
   providers: [ConfigService, AuthService, AuthGuard, AuthResolver], // Look at the providers, we provided JwtStrategy
-  exports: [AuthGuard, PassportModule], // in Exports , we exported jwtStrategy and passport module, so other modules may use them
+  exports: [AuthGuard, ConfigService , AuthService , PassportModule], // in Exports , we exported jwtStrategy and passport module, so other modules may use them
 })
 export class AuthModule {}

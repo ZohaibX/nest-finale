@@ -12,23 +12,25 @@ export class TaskService {
     private taskRepo: TaskRepo,
   ) {}
 
-  async getTasks(): Promise<Task[]> {
-    return this.taskRepo.getTasks();
+  async getTasks(
+    taskIds: string[]
+  ): Promise<Task[]> {
+    return this.taskRepo.getTasks(taskIds);
   }
 
-  async getTask(id: string): Promise<Task> {
-    return this.taskRepo.getTask(id);
+  async getTask(id: string , taskIds: string[]): Promise<Task> {
+    return this.taskRepo.getTask(id , taskIds);
   }
 
   async createTask(name: string): Promise<Task> {
     return this.taskRepo.createTask(name);
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-    return this.taskRepo.updateTaskStatus(id, status);
+  async updateTaskStatus(id: string, status: TaskStatus , taskIds: string[]): Promise<Task> {
+    return this.taskRepo.updateTaskStatus(id, status , taskIds);
   }
 
-  async deleteTask(id: string): Promise<{ name: string }> {
-    return this.taskRepo.deleteTask(id);
+  async deleteTask(id: string , taskIds: string[]): Promise<{ name: string }> {
+    return this.taskRepo.deleteTask(id , taskIds);
   }
 }

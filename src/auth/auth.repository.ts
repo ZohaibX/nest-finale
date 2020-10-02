@@ -11,17 +11,18 @@ import { v4 as uuid } from 'uuid';
 
 @EntityRepository(Auth) // Repository of the entity
 export class AuthRepo extends Repository<Auth> {
-  async signUp(authInput: AuthInput): Promise<string> {
-    const { username, password } = authInput;
+  async signUp(authInput: AuthInput): Promise<{ id: string; username: string;}> {
+    const { username, password , tasks } = authInput;
 
     const user = this.create();
 
     (user.id = uuid()), (user.username = username);
     user.salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(password, user.salt);
+    user.tasks = tasks;
     try {
       await user.save();
-      return user.username;
+      return {id: user.id , username: user.username};
     } catch (error) {
       // console.log(error.code); // i can check the error code by make a mistake by creating existing account
       if (error.code === '23505') {
@@ -33,7 +34,7 @@ export class AuthRepo extends Repository<Auth> {
     }
   }
 
-  async validateUserAccount(authInput: AuthInput): Promise<string> {
+  async validateUserAccount(authInput: AuthInput): Promise<{ id: string; username: string;}> {
     const { username, password } = authInput;
     const user = await this.findOne({ username: username });
 
@@ -41,7 +42,7 @@ export class AuthRepo extends Repository<Auth> {
 
     const validatePassword = await user.validatePassword(password);
 
-    if (user && validatePassword) return user.username;
+    if (user && validatePassword) return {id: user.id , username: user.username};
     return null;
   }
 }
