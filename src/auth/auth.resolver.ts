@@ -28,7 +28,6 @@ export class AuthResolver {
   @Query(returns => AuthType)
   @UseGuards(AuthGuard)
   test(@Context('user') user: Auth) {
-    console.log(user.username);
     this.authService.test(user.username);
     return { signToken: 'test' };
   }

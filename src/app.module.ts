@@ -5,6 +5,7 @@ import { Task } from './task/task.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmMongoConfig } from './config/typeorm.mongoConfig';
 import { AuthModule } from './auth/auth.module';
+import { StudentModule } from './student/student.module';
 import * as passport from 'passport';
 
 @Module({
@@ -16,6 +17,7 @@ import * as passport from 'passport';
     }),
     TaskModule,
     AuthModule,
+    StudentModule,
   ],
 })
 export class AppModule {}

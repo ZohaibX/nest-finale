@@ -17,9 +17,9 @@ export class AuthService {
   private logger = new Logger();
 
   async signUp(authInput: AuthInput): Promise<{ signToken: string }> {
-    const {id , username} = await this.authRepo.signUp(authInput);
+    const { id, username } = await this.authRepo.signUp(authInput);
 
-    const payload: JwtPayload = { id , username }; // JwtPayload is an interface class defined in other file
+    const payload: JwtPayload = { id, username }; // JwtPayload is an interface class defined in other file
     const signToken = this.jwtService.sign(payload); // signing with payload
 
     this.logger.debug(
@@ -29,12 +29,12 @@ export class AuthService {
   }
 
   async signIn(authInput: AuthInput): Promise<{ signToken: string }> {
-    const {id , username} = await this.authRepo.validateUserAccount(authInput);
+    const { id, username } = await this.authRepo.validateUserAccount(authInput);
 
     if (!username) throw new UnauthorizedException('Invalid Credentials'); // if null, throw UnauthorizedException
 
     // signing token
-    const payload: JwtPayload = { id , username }; // JwtPayload is an interface class defined in other file
+    const payload: JwtPayload = { id, username }; // JwtPayload is an interface class defined in other file
     const signToken = this.jwtService.sign(payload); // signing with payload
 
     this.logger.debug(
@@ -46,17 +46,37 @@ export class AuthService {
 
   async test(username: string) {
     const data = await this.authRepo.findOne({ username });
-    console.log(data);
   }
 
   async assignTasksToUser(userId: string, taskIds: string[]) {
     const user = await this.authRepo.findOne({ id: userId });
     user.tasks = [...user.tasks, ...taskIds];
-    return this.authRepo.save(user)
+    return this.authRepo.save(user);
   }
-
-  async getAllTasksAssignedToUser(userId): Promise<string[]> {
+  async removeDeletedIdFromUser(userId: string, taskId: string) {
+    const user = await this.authRepo.findOne({ id: userId });
+    const index = user.tasks.indexOf(taskId);
+    user.tasks.splice(index, 1);
+    return this.authRepo.save(user);
+  }
+  async getAllTasksAssignedToUser(userId: string): Promise<string[]> {
     const user = await this.authRepo.findOne({ id: userId });
     return user.tasks;
+  }
+
+  async assignStudentsToUser(userId: string, studentIds: string[]) {
+    const user = await this.authRepo.findOne({ id: userId });
+    user.students = [...user.students, ...studentIds];
+    return this.authRepo.save(user);
+  }
+  async removeDeletedStudentIdFromUser(userId: string, studentId: string) {
+    const user = await this.authRepo.findOne({ id: userId });
+    const index = user.tasks.indexOf(studentId);
+    user.students.splice(index, 1);
+    return this.authRepo.save(user);
+  }
+  async getAllStudentsAssignedToUser(userId: string): Promise<string[]> {
+    const user = await this.authRepo.findOne({ id: userId });
+    return user.students;
   }
 }

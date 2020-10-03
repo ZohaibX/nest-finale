@@ -35,5 +35,8 @@ export class Auth extends BaseEntity {
   }
 
   @Column()
-  tasks : string[];
+  tasks: string[];
+
+  @Column()
+  students: string[];
 }

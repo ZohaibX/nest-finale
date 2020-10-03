@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 import { Task } from './../task/task.entity';
 import { Auth } from './../auth/auth.entity';
+import { Student } from '../student/student.entity';
 
 // all the process.env.RDS Variables will be saved in Elasticbeanstalk
 export const typeOrmMongoConfig: TypeOrmModuleOptions = {
@@ -11,5 +12,5 @@ export const typeOrmMongoConfig: TypeOrmModuleOptions = {
   synchronize: true,
   useUnifiedTopology: true,
   // we'll define all the entities here
-  entities: [Task, Auth],
+  entities: [Task, Auth, Student],
 };

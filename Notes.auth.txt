@@ -1,0 +1,3 @@
+Everything is in task and student module 
+but two must outside things are, add every entity to typeorm config file 
+and app.module file must be like this as per requirements 

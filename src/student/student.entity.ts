@@ -1,8 +1,8 @@
 import { ObjectIdColumn, Column, Entity, PrimaryColumn } from 'typeorm';
-import { TaskStatus } from './enum/status.enum';
+import { StudentLevel } from './enum/student.level';
 
 @Entity()
-export class Task {
+export class Student {
   @ObjectIdColumn()
   _id: string;
 
@@ -13,13 +13,8 @@ export class Task {
   name: string;
 
   @Column()
-  status: TaskStatus;
-
-  @Column()
-  createdAt: string;
+  status: StudentLevel;
 
   @Column()
   userId: string;
 }
-
-// we need to provide this entity file to app module and module file of this folder

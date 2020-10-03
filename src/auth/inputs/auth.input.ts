@@ -14,4 +14,7 @@ export class AuthInput {
 
   @Field(() => [ID], { defaultValue: [] })
   tasks: string[];
+
+  @Field(() => [ID], { defaultValue: [] })
+  students: string[];
 }

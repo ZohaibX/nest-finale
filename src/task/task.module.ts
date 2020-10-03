@@ -7,8 +7,8 @@ import { TaskType } from './task.type';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TaskRepo]) , AuthModule],
-  providers: [TaskService, TaskResolver ],
-  exports: [TaskService ],
+  imports: [TypeOrmModule.forFeature([TaskRepo]), AuthModule],
+  providers: [TaskService, TaskResolver],
+  exports: [TaskService],
 })
 export class TaskModule {}
