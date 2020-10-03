@@ -13,7 +13,10 @@ import { v4 as uuid } from 'uuid';
 export class AuthRepo extends Repository<Auth> {
   async signUp(
     authInput: AuthInput,
-  ): Promise<{ id: string; username: string }> {
+  ): Promise<{
+    id: string;
+    username: string;
+  }> {
     const { username, password, tasks, students } = authInput;
 
     const user = this.create();
@@ -25,7 +28,10 @@ export class AuthRepo extends Repository<Auth> {
     user.students = students;
     try {
       await user.save();
-      return { id: user.id, username: user.username };
+      return {
+        id: user.id,
+        username: user.username,
+      };
     } catch (error) {
       // console.log(error.code); // i can check the error code by make a mistake by creating existing account
       if (error.code === '23505') {
@@ -39,7 +45,12 @@ export class AuthRepo extends Repository<Auth> {
 
   async validateUserAccount(
     authInput: AuthInput,
-  ): Promise<{ id: string; username: string }> {
+  ): Promise<{
+    id: string;
+    username: string;
+    tasks: string[];
+    students: string[];
+  }> {
     const { username, password } = authInput;
     const user = await this.findOne({ username: username });
 
@@ -48,7 +59,12 @@ export class AuthRepo extends Repository<Auth> {
     const validatePassword = await user.validatePassword(password);
 
     if (user && validatePassword)
-      return { id: user.id, username: user.username };
+      return {
+        id: user.id,
+        username: user.username,
+        tasks: user.tasks,
+        students: user.students,
+      };
     return null;
   }
 }

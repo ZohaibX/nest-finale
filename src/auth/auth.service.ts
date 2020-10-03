@@ -28,8 +28,15 @@ export class AuthService {
     return { signToken };
   }
 
-  async signIn(authInput: AuthInput): Promise<{ signToken: string }> {
-    const { id, username } = await this.authRepo.validateUserAccount(authInput);
+  async signIn(
+    authInput: AuthInput,
+  ): Promise<{ signToken: string; tasks: string[]; students: string[] }> {
+    const {
+      id,
+      username,
+      tasks,
+      students,
+    } = await this.authRepo.validateUserAccount(authInput);
 
     if (!username) throw new UnauthorizedException('Invalid Credentials'); // if null, throw UnauthorizedException
 
@@ -41,7 +48,7 @@ export class AuthService {
       `Token signed with the payload ${JSON.stringify(payload)} `,
     );
 
-    return { signToken };
+    return { signToken, tasks, students };
   }
 
   async test(username: string) {

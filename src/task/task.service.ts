@@ -35,4 +35,15 @@ export class TaskService {
   async deleteTask(id: string, taskIds: string[]): Promise<{ id: string }> {
     return this.taskRepo.deleteTask(id, taskIds);
   }
+
+  async getManyTasks(taskIds: string[]) {
+    console.log(taskIds);
+    return this.taskRepo.find({
+      where: {
+        id: {
+          $in: taskIds,
+        },
+      },
+    });
+  }
 }

@@ -2,7 +2,7 @@ Reference is to nestjs-mongo-gql repository from github
 
 ===============================================RELATIONS=================================================================
 
-==============================================Assigning Lesson to Students==============================================
+=========================Assigning Lesson to Students or it is students to lesson==============================================
 
 1 - LESSON INPUT FOLDER, create ASSIGN INPUT file, according to which we have to provide ID of a lesson and [ID] of students 
   -- so we can save [ID] of students to the data of lesson ID -- as src\lesson\input\assignInput.input.ts

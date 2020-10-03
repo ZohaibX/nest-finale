@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -7,6 +7,8 @@ import { AuthRepo } from './auth.repository';
 import { AuthResolver } from './auth.resolver';
 import { AuthGuard } from './auth-guard/auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { StudentModule } from '../student/student.module';
+import { TaskModule } from '../task/task.module';
 
 @Module({
   imports: [
@@ -20,8 +22,10 @@ import { ConfigService } from '@nestjs/config';
       },
     }),
     TypeOrmModule.forFeature([AuthRepo]),
+    forwardRef(() => StudentModule),
+    forwardRef(() => TaskModule),
   ],
   providers: [ConfigService, AuthService, AuthGuard, AuthResolver], // Look at the providers, we provided JwtStrategy
-  exports: [AuthGuard, ConfigService , AuthService , PassportModule], // in Exports , we exported jwtStrategy and passport module, so other modules may use them
+  exports: [AuthGuard, ConfigService, AuthService, PassportModule], // in Exports , we exported jwtStrategy and passport module, so other modules may use them
 })
 export class AuthModule {}

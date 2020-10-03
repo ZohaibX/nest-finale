@@ -41,4 +41,15 @@ export class StudentService {
   ): Promise<{ id: string }> {
     return this.studentRepo.deleteStudent(id, studentIds);
   }
+
+  async getManyStudents(studentIds: string[]) {
+    console.log(studentIds);
+    return this.studentRepo.find({
+      where: {
+        id: {
+          $in: studentIds,
+        },
+      },
+    });
+  }
 }
