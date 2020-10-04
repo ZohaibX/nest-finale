@@ -4,6 +4,8 @@ import { TaskRepo } from './task.repository';
 import { Task } from './task.entity';
 import { v4 as uuid } from 'uuid';
 import { TaskStatus } from './enum/status.enum';
+import { TaskInput } from './inputs/taskInput.input';
+import { AssignInput } from './inputs/assignmentInput.input';
 
 @Injectable()
 export class TaskService {
@@ -20,8 +22,8 @@ export class TaskService {
     return this.taskRepo.getTask(id, taskIds);
   }
 
-  async createTask(name: string, userId: string): Promise<Task> {
-    return this.taskRepo.createTask(name, userId);
+  async createTask(taskInput: TaskInput, userId: string): Promise<Task> {
+    return this.taskRepo.createTask(taskInput, userId);
   }
 
   async updateTaskStatus(
@@ -45,5 +47,15 @@ export class TaskService {
         },
       },
     });
+  }
+
+  async assignStudentsToTask(assignInput: AssignInput) {
+    const { taskId, studentIds } = assignInput;
+    const task = await this.taskRepo.findOne({ id: taskId });
+    console.log(task);
+
+    task.students = [...task.students, ...studentIds];
+    console.log(task);
+    return this.taskRepo.save(task);
   }
 }

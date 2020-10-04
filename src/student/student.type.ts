@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { StudentLevel } from './enum/student.level';
+import { TaskType } from 'src/task/task.type';
 
 @ObjectType('Student')
 export class StudentType {
@@ -11,4 +12,7 @@ export class StudentType {
 
   @Field()
   status: StudentLevel;
+
+  @Field(type => [TaskType])
+  tasks: string[];
 }

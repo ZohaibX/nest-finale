@@ -1,8 +1,15 @@
 Reference is to nestjs-mongo-gql repository from github
 
+// auth relations is almost same but difference is, whenever we create a student or a task, 
+// auth entity will get that task's/student's id in their database 
+// so we don't have assignTasksToStudent like functionality as below but something different program
+// way to do is whenever we create any task or student using some auth jwt header ,
+// we will send that created task/student id to auth file , to save that id in user's database 
+// this thing has been done in resolver files -> create mutations of task/student file 
+
 ===============================================RELATIONS=================================================================
 
-=========================Assigning Lesson to Students or it is students to lesson==============================================
+=========================Assigning students to lesson==============================================
 
 1 - LESSON INPUT FOLDER, create ASSIGN INPUT file, according to which we have to provide ID of a lesson and [ID] of students 
   -- so we can save [ID] of students to the data of lesson ID -- as src\lesson\input\assignInput.input.ts
@@ -47,7 +54,7 @@ Reference is to nestjs-mongo-gql repository from github
 
 9 - STUDENT SERVICE FILE, we will have a method in which we will send array of student ids (from SERVICE RESOLVER) 
   -- and get their data back, in this case, it is getManyStudents()
-  -- so in SERVICE RESOLVER FILE, we should have a @ResolveField() method, in this method, we will use whole lesson -
+  -- so in LESSON RESOLVER FILE, we should have a @ResolveField() method, in this method, we will use whole lesson -
   -- entity in parameters as @Parent() and we will send lesson.students(which is [ID]) to STUDENT SERVICE FILE method -
   -- getManyStudents() 
   -- this method will run every time when we get a new student ID/[ID] in lesson.students  

@@ -3,6 +3,7 @@ import { Task } from './task.entity';
 import { v4 as uuid } from 'uuid';
 import { TaskStatus } from './enum/status.enum';
 import { NotFoundException } from '@nestjs/common';
+import { TaskInput } from './inputs/taskInput.input';
 
 @EntityRepository(Task)
 export class TaskRepo extends Repository<Task> {
@@ -24,13 +25,15 @@ export class TaskRepo extends Repository<Task> {
     return this.findOne({ id: userCreatedTaskId });
   }
 
-  async createTask(name: string, userId: string): Promise<Task> {
+  async createTask(taskInput: TaskInput, userId: string): Promise<Task> {
+    const { name, students } = taskInput;
     const task = this.create({
       id: uuid(),
       name,
       status: TaskStatus.DONE,
       createdAt: new Date().toISOString(),
       userId,
+      students,
     });
 
     return this.save(task);

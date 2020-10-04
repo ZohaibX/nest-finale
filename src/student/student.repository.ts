@@ -4,6 +4,7 @@ import { Task } from './../task/task.entity';
 import { v4 as uuid } from 'uuid';
 import { StudentLevel } from './enum/student.level';
 import { NotFoundException } from '@nestjs/common';
+import { StudentInput } from './inputs/student.input';
 
 @EntityRepository(Student)
 export class StudentRepo extends Repository<Student> {
@@ -24,15 +25,17 @@ export class StudentRepo extends Repository<Student> {
   }
 
   async createStudent(
-    name: string,
+    studentInput: StudentInput,
     status: StudentLevel,
     userId: string,
   ): Promise<Student> {
+    const { name, tasks } = studentInput;
     const student = this.create({
       id: uuid(),
       name,
       status,
       userId,
+      tasks,
     });
 
     return this.save(student);

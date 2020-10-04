@@ -9,7 +9,6 @@ export class StudentInput {
   @Field()
   name: string;
 
-  @MinLength(1)
-  @Field()
-  status: StudentLevel;
+  @Field(() => [ID], { defaultValue: [] })
+  tasks: string[];
 }

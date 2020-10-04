@@ -17,4 +17,7 @@ export class Student {
 
   @Column()
   userId: string;
+
+  @Column()
+  tasks: string[];
 }

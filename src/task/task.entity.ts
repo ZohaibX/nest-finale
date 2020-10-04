@@ -20,6 +20,9 @@ export class Task {
 
   @Column()
   userId: string;
+
+  @Column()
+  students: string[];
 }
 
 // we need to provide this entity file to app module and module file of this folder

@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { TaskStatus } from './enum/status.enum';
+import { StudentType } from '../student/student.type';
 
 //! This file is specific for gql , although similar to entity file
 
@@ -16,4 +17,7 @@ export class TaskType {
 
   @Field()
   createdAt: string;
+
+  @Field(type => [StudentType])
+  students: string[];
 }

@@ -1,4 +1,12 @@
-import { Resolver, Query, Context, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Context,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { StudentType } from './student.type';
 import { StudentService } from './student.service';
 import { AuthService } from '../auth/auth.service';
@@ -10,12 +18,15 @@ import { StudentInput } from './inputs/student.input';
 import { StudentLevel } from './enum/student.level';
 import { StudentLevelValidationPipe } from './validation-pipe/status-validation.pipe';
 import { TaskType } from 'src/task/task.type';
+import { AssignTasksToStudentInput } from './inputs/assign.input';
+import { TaskService } from 'src/task/task.service';
 
 @Resolver(of => StudentType) // its a resolver with return type
 export class StudentResolver {
   constructor(
     private studentService: StudentService,
     private authService: AuthService,
+    private taskService: TaskService,
   ) {}
 
   @Query(returns => [StudentType])
@@ -42,12 +53,16 @@ export class StudentResolver {
   @Mutation(returns => StudentType)
   @UseGuards(AuthGuard)
   async createStudent(
-    @Args('name') name: string,
+    @Args('studentInput') studentInput: StudentInput,
     @Args('status', StudentLevelValidationPipe) status: StudentLevel,
     @Context('user') user: Auth,
   ): Promise<Student> {
     const { id: userId } = user;
-    const data = await this.studentService.createStudent(name, status, userId);
+    const data = await this.studentService.createStudent(
+      studentInput,
+      status,
+      userId,
+    );
     const studentId = [data.id];
     this.authService.assignStudentsToUser(userId, studentId);
     return data;
@@ -78,5 +93,16 @@ export class StudentResolver {
     const deletedId = await this.studentService.deleteStudent(id, studentIds);
     this.authService.removeDeletedStudentIdFromUser(user.id, deletedId.id);
     return deletedId;
+  }
+
+  @Mutation(returns => StudentType)
+  assignTasksToStudent(
+    @Args('assignInput') assignInput: AssignTasksToStudentInput,
+  ) {
+    return this.studentService.assignTasksToStudent(assignInput);
+  }
+  @ResolveField()
+  async tasks(@Parent() student: Student) {
+    return this.taskService.getManyTasks(student.tasks);
   }
 }
