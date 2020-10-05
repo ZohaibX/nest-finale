@@ -1,15 +1,17 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
-import { MinLength } from 'class-validator';
+import { InputType, Field, ID  } from '@nestjs/graphql';
+import { MinLength, Matches, IsNumber, Contains, Length } from 'class-validator';
 // GlobalPipe must be provide to main.ts file to use class-validator
 
 @InputType()
 export class AuthInput {
-  @MinLength(1)
-  @Field()
+  @Field(type => String)
+  @Length(5, 20)
   username: string;
-
-  @MinLength(1)
+  
   @Field()
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'Password is too weak',
+  })
   password: string;
 
   @Field(() => [ID], { defaultValue: [] })

@@ -9,6 +9,9 @@ import { AuthGuard } from './auth-guard/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { StudentModule } from '../student/student.module';
 import { TaskModule } from '../task/task.module';
+import * as config from 'config';
+
+const myConfig: { secretkey: string; expiresIn: number } = config.get('jwt');
 
 @Module({
   imports: [
@@ -16,9 +19,9 @@ import { TaskModule } from '../task/task.module';
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret: 'secret',
+      secret: myConfig.secretkey,
       signOptions: {
-        expiresIn: 3600, // 1h
+        expiresIn: myConfig.expiresIn, // 1h
       },
     }),
     TypeOrmModule.forFeature([AuthRepo]),

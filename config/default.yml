@@ -1,0 +1,8 @@
+db:
+  type: 'mongodb'
+
+jwt:
+  expiresIn: 3600
+
+server:
+  port: 3000

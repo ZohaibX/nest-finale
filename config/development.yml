@@ -1,0 +1,6 @@
+db:
+  url: 'mongodb+srv://zohaib:1234@cluster0-vvrwq.mongodb.net/test-1?retryWrites=true&w=majority'
+  synchronize: true
+
+jwt:
+  secretkey: 'secret'

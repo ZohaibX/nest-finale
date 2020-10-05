@@ -11,7 +11,7 @@ import { AuthType } from './auth.type';
 import { AuthService } from './auth.service';
 import { AuthInput } from './inputs/auth.input';
 import { Auth } from './auth.entity';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 // import { AuthGuard } from '@nestjs/passport';
 import { AuthGuard } from './auth-guard/auth.guard';
 import { StudentService } from 'src/student/student.service';
@@ -26,6 +26,7 @@ export class AuthResolver {
   ) {}
 
   @Mutation(returns => AuthType)
+    @UsePipes(ValidationPipe)
   async signUp(
     @Args('authInput') authInput: AuthInput,
   ): Promise<{ signToken: string }> {

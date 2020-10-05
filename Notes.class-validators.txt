@@ -1,0 +1,38 @@
+    // we may use these validators in all input files and in typeorm file if we need 
+    // but in input files, all this will be applied when we use { @UsePipes(ValidationPipe) } 
+         in every query and mutation (where we wanna apply validators) in resolver files , as in auth resolver , signUp mutation
+    
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Length(10, 20)
+    title: string;
+
+    @Contains("hello")
+    text: string;
+
+    @IsInt()
+    @Min(0)
+    @Max(10)
+    rating: number;
+
+    @IsEmail()
+    email: string;
+
+    @IsFQDN() // FQDN means fully qualified domain name 
+    site: string;
+
+    @IsDate()
+    createDate: Date;
+
+    
+    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'Password is too weak',
+    })
+    // REGEX Exp is for strong password
+    /*
+    Passwords will contain at least 1 upper case letter
+    Passwords will contain at least 1 lower case letter
+    Passwords will contain at least 1 number or special character
+    There is no length validation (min, max) in this regex!
+    */

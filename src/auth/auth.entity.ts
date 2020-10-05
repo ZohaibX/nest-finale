@@ -4,12 +4,10 @@ import {
   Unique,
   Column,
   Entity,
-  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 // import { Task } from '../tasks/task.entity';
 import { ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { Task } from '../task/task.entity';
 
 @Entity()
 @Unique(['username']) // we will add the title of the columns we want to be unique
@@ -40,3 +38,4 @@ export class Auth extends BaseEntity {
   @Column()
   students: string[];
 }
+

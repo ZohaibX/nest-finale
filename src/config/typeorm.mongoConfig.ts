@@ -4,12 +4,18 @@ import { Task } from './../task/task.entity';
 import { Auth } from './../auth/auth.entity';
 import { Student } from '../student/student.entity';
 
-// all the process.env.RDS Variables will be saved in Elasticbeanstalk
+const myConfig: {
+  type: 'mongodb';
+  url: string;
+  synchronize: boolean;
+} = config.get('db');
+
+//! all the process.env Variables we will apply when we will deploy it in elasticbeanstalk
+//! Everything is in deployment section of nest js course .
 export const typeOrmMongoConfig: TypeOrmModuleOptions = {
-  type: 'mongodb',
-  url:
-    'mongodb+srv://zohaib:1234@cluster0-vvrwq.mongodb.net/test-1?retryWrites=true&w=majority',
-  synchronize: true,
+  type: myConfig.type,
+  url: process.env.URL || myConfig.url,
+  synchronize: myConfig.synchronize, // false in production
   useUnifiedTopology: true,
   // we'll define all the entities here
   entities: [Task, Auth, Student],

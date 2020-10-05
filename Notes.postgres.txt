@@ -1,0 +1,7 @@
+All reference is to my repository nestjs-postgres-rest
+
+first of all, i need to create a database using pgAdmin 
+I can get the typeorm file from repository
+Everything we need to do is connection to postgres, all crud operations are handled by typeorm 
+    so we will do as same as in here we did for mongo , like this.create or this.findOne
+in entity files , no _id will be automatically created by the way, as in here it gets created
