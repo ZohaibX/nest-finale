@@ -1,1 +1,0 @@
-Deployment is in the main nestjs course folder, i can do that from there 

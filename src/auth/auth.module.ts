@@ -13,13 +13,17 @@ import * as config from 'config';
 
 const myConfig: { secretkey: string; expiresIn: number } = config.get('jwt');
 
+//! process.env.JWT_SECRET is from elasticbeanstalk when we add there, env variables
+//! token should be provided in as
+//! { "authorization": "Bearer TOKEN"}
+
 @Module({
   imports: [
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret: myConfig.secretkey,
+      secret: process.env.JWT_SECRET || myConfig.secretkey,
       signOptions: {
         expiresIn: myConfig.expiresIn, // 1h
       },

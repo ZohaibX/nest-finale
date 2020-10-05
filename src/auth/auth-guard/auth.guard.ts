@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     }
     const token = auth.split(' ')[1];
     try {
-      return jwt.verify(token, myConfig.secretkey);
+      return jwt.verify(token, process.env.JWT_SECRET || myConfig.secretkey);
     } catch (err) {
       throw new UnauthorizedException('Invalid Token');
     }

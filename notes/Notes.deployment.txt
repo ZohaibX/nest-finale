@@ -1,0 +1,17 @@
+Deployment is in the main nestjs course folder, i can do that from there 
+
+
+add prestart:prod property in package.json as in here 
+and do, yarn start:prod
+
+transfer some of the devDependencies tp dependencies -- like these in this case as below bcz elasticbeanstalk only installs dependencies
+
+    "@types/node": "^13.9.1",
+    "@types/express": "^4.17.3",
+    "ts-node": "9.0.0",
+    "typescript": "^3.7.4"
+
+add environment variables as process.env. variables as in typeorm file and auth MODULE file in jwt config 
+and then i can see the video in nestjs course -> deployment -> video 8
+and in the video,i have to do elasticbeanstalk create application, add env variables and deploy
+in this case , i have 2 env variables, process.env.URL and process.env.JWT_SECRET

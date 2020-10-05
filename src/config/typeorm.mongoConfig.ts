@@ -12,6 +12,7 @@ const myConfig: {
 
 //! all the process.env Variables we will apply when we will deploy it in elasticbeanstalk
 //! Everything is in deployment section of nest js course .
+
 export const typeOrmMongoConfig: TypeOrmModuleOptions = {
   type: myConfig.type,
   url: process.env.URL || myConfig.url,
