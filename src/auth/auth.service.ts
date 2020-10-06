@@ -57,8 +57,9 @@ export class AuthService {
 
   async assignTasksToUser(userId: string, taskIds: string[]) {
     const user = await this.authRepo.findOne({ id: userId });
+    console.log(user);
     user.tasks = [...user.tasks, ...taskIds];
-    return this.authRepo.save(user);
+    return this.authRepo.save(user); // we could do this.authRepo.save(user) or user.save() but this one is better for tests
   }
   async removeDeletedIdFromUser(userId: string, taskId: string) {
     const user = await this.authRepo.findOne({ id: userId });

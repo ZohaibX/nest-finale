@@ -2,7 +2,11 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Auth } from './auth.entity';
 import { AuthInput } from './inputs/auth.input';
 import * as bcrypt from 'bcryptjs';
-import { NotFoundException, UnauthorizedException, Logger } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnauthorizedException,
+  Logger,
+} from '@nestjs/common';
 import {
   ConflictException,
   InternalServerErrorException,
@@ -11,8 +15,7 @@ import { v4 as uuid } from 'uuid';
 
 @EntityRepository(Auth) // Repository of the entity
 export class AuthRepo extends Repository<Auth> {
-
-   private logger = new Logger();
+  private logger = new Logger();
 
   async signUp(
     authInput: AuthInput,
@@ -21,7 +24,7 @@ export class AuthRepo extends Repository<Auth> {
     username: string;
   }> {
     const { username, password, tasks, students } = authInput;
-    this.logger.debug(username)
+    this.logger.debug(username);
 
     const user = this.create();
 
@@ -30,6 +33,7 @@ export class AuthRepo extends Repository<Auth> {
     user.password = await bcrypt.hash(password, user.salt);
     user.tasks = tasks;
     user.students = students;
+
     try {
       await user.save();
       return {
@@ -39,7 +43,7 @@ export class AuthRepo extends Repository<Auth> {
     } catch (error) {
       // console.log(error.code); // i can check the error code by make a mistake by creating existing account
       console.log(error.code);
-      
+
       if (error.code === 11000) {
         // if username is duplicate, we will get this error code
         throw new ConflictException('Username already exists');
@@ -58,7 +62,7 @@ export class AuthRepo extends Repository<Auth> {
     students: string[];
   }> {
     const { username, password } = authInput;
-    this.logger.debug(username)
+    this.logger.debug(username);
     const user = await this.findOne({ username: username });
 
     if (!user) throw new NotFoundException('User not found');
@@ -66,8 +70,8 @@ export class AuthRepo extends Repository<Auth> {
     const validatePassword = await user.validatePassword(password);
 
     if (!validatePassword)
-      throw new UnauthorizedException('Invalid Username or Password')
-    
+      throw new UnauthorizedException('Invalid Username or Password');
+
     return {
       id: user.id,
       username: user.username,

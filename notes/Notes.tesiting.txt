@@ -1,0 +1,78 @@
+!!!!!!!!!!!!!Service file, REPO and ENTITY File tests
+
+
+When we need to test service or repository
+we will create a testing module and inject repository or other services 
+and create their mockRepository or mockServices file and their jest functions
+
+--------------------------------------One More thing-------------------------- 
+if in actual repo file 
+i have done 
+1 - // const user = await this.create()
+    // this.save(user);
+In test, i will have save function from mockRepo 
+like 
+  mockRepo = () => ({
+    findOne: jest.fn() ,
+    save: jest.fn()
+  }) 
+if i have done 
+2 - //  const user = await this.create()
+    // user.save()
+save function is coming from user, so we will make it a separate fn
+as we will do something like 
+    const save = jest.fn()
+    const mockRepo = () => ({
+      findOne: jest.fn().mockResolvedValue({ save: save})
+    })
+-----1st way is better--------
+
+
+---------------------------------------1-----------------------------------
+We will have to create a user whenever we are testing some user 
+in beforeEach function, and we will initialize properties of user according to the need 
+
+
+---------------------------------------2-----------------------------------
+if we are testing a function which depends on some other function 
+like  function validation(){
+  const data = bcrypt.hash()
+  const data = authRepo.sign()
+}
+
+bcrypt will be imported from bcryptjs
+and authRepo will be used from mockRepo
+and we will make inside functions = jest.fn()
+and we will defined mockResolvedValue (for await function pass)
+        mockRejectedValue(when we expect to throw an error in try catch)
+        mockReturnedValue(for non sync function)
+
+
+when we expect a throw error by a try catch block 
+like  
+// try{
+//   user.save()
+// } catch e
+then we will use save.mockRejectedValue({ some expected error i can receive})
+and test function will automatically reject save function and will go to catch block with my error
+so thats how we expect the whole fn
+await expect(fn()).rejects.toThrow(ConflictException) 
+
+when we expect a throw error by an if-else 
+like  
+// const user = await findOne({ id:id})
+// if(!user) throw new ConflictException("blah blah")
+user function is not throwing an error here but if user is undefined or null , fn will throw
+so we will do mockUser.findOne = jest.fn().mockResolvedValue({ some value we expect,in this case, null})
+so thats how we expect this fn 
+await expect(fn()).rejects.toThrow(full statement like throw new ConflictException("blah blah"))
+
+when we expect to pass an async fn 
+like
+// try{
+//   user.save()
+// } catch e
+then we will use save.mockResolvedValue({ some output we expect })
+user.save function will automatically pass 
+and do whatever it does next 
+
